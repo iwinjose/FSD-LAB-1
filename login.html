@@ -1,99 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | Turf Arena</title>
     <meta name="description" content="Login to your Turf Arena account.">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
 
-    <header>
-        <nav>
-            <div class="logo">
-                <a href="index.html"><i class="fas fa-futbol"></i> Turf<span>Arena</span></a>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#10b981', // emerald-500
+                        'primary-dark': '#047857', // emerald-700
+                        accent: '#34d399', // emerald-400
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
+                        'glow': '0 0 20px rgba(16, 185, 129, 0.4)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .glass-nav {
+                @apply bg-white/80 backdrop-blur-md border-b border-white/20 shadow-sm;
+            }
+            .btn-primary {
+                @apply bg-gradient-to-r from-primary to-primary-dark text-white px-8 py-3 rounded-full font-heading font-semibold hover:shadow-glow hover:-translate-y-1 transition-all duration-300;
+            }
+            .input-field {
+                @apply w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all duration-300;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-sans text-slate-700 bg-slate-50 antialiased flex flex-col min-h-screen">
+
+    <!-- Navigation -->
+    <header class="fixed w-full top-0 z-50 glass-nav" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <nav class="flex items-center justify-between h-20">
+                <div class="flex-shrink-0">
+                    <a href="index.html" class="flex items-center gap-2 group">
+                        <span class="font-heading font-bold text-2xl text-slate-800 tracking-tight">Turf <span
+                                class="text-primary">Arena</span></span>
+                    </a>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html#home"
+                        class="font-medium text-slate-600 hover:text-primary transition-colors">Home</a>
+                    <a href="index.html#about-us"
+                        class="font-medium text-slate-600 hover:text-primary transition-colors">About</a>
+                    <a href="index.html#slots"
+                        class="font-medium text-slate-600 hover:text-primary transition-colors">Slots</a>
+                    <a href="index.html#booking"
+                        class="font-medium text-slate-600 hover:text-primary transition-colors">Book Now</a>
+                    <a href="index.html#contact"
+                        class="font-medium text-slate-600 hover:text-primary transition-colors">Contact</a>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="login.html" class="font-heading font-semibold text-primary transition-colors">Login</a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button class="mobile-menu-btn text-slate-600 hover:text-primary focus:outline-none p-2"
+                        aria-label="Toggle navigation">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-2xl w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
+                    </button>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div
+            class="md:hidden absolute top-20 left-0 w-full bg-white/95 backdrop-blur-lg border-b border-slate-100 shadow-xl opacity-0 invisible transition-all duration-300 transform -translate-y-4 nav-links">
+            <div class="px-6 py-6 space-y-4 flex flex-col items-center">
+                <a href="index.html#home" class="block text-lg font-medium text-slate-800 hover:text-primary">Home</a>
+                <a href="index.html#features"
+                    class="block text-lg font-medium text-slate-800 hover:text-primary">Features</a>
+                <a href="index.html#slots" class="block text-lg font-medium text-slate-800 hover:text-primary">Available
+                    Slots</a>
+                <a href="index.html#about-us" class="block text-lg font-medium text-slate-800 hover:text-primary">About
+                    Us</a>
+                <a href="index.html#contact"
+                    class="block text-lg font-medium text-slate-800 hover:text-primary">Contact</a>
+                <hr class="w-full border-slate-200">
+                <a href="login.html" class="block text-lg font-heading font-semibold text-primary">Login to Account</a>
             </div>
-            <button class="mobile-menu-btn" aria-label="Toggle navigation"><i class="fas fa-bars"></i></button>
-            <ul class="nav-links">
-                <li><a href="index.html#home">Home</a></li>
-                <li><a href="index.html#about-us">About</a></li>
-                <li><a href="index.html#slots">Available Slots</a></li>
-                <li><a href="index.html#booking">Book Now</a></li>
-                <li><a href="index.html#contact">Contact</a></li>
-                <li><a href="login.html">Login</a></li>
-            </ul>
-        </nav>
+        </div>
     </header>
 
-    <main>
-        <section id="login" style="background-color: var(--light-gray); min-height: 70vh; display: flex; align-items: center;">
-            <article class="form-container" style="width: 100%; margin: 0 auto; max-width: 450px;">
-                <div class="text-center" style="margin-bottom: 2rem;">
-                    <i class="fas fa-user-circle text-primary" style="font-size: 4rem; margin-bottom: 1rem;"></i>
-                    <h2 style="margin-bottom: 0.5rem;">Welcome Back</h2>
-                    <p style="color: var(--text-light); margin-bottom: 0;">Please enter your details to sign in.</p>
+    <main class="flex-grow pt-20 flex items-center justify-center relative overflow-hidden">
+        <!-- Background Elements -->
+        <div class="absolute inset-0 z-0">
+            <img src="images/hero_turf.png" alt="Turf Background" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm"></div>
+        </div>
+
+        <section class="w-full max-w-md px-6 py-12 relative z-10">
+            <div
+                class="bg-white/90 backdrop-blur-xl border border-white/20 p-8 md:p-10 rounded-3xl shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] transform transition-all">
+                <div class="text-center mb-8">
+                    <h2 class="font-heading text-3xl font-bold text-slate-800 mb-2">Welcome Back</h2>
+                    <p class="text-slate-500">Sign in to manage your turf bookings</p>
                 </div>
-                
-                <form id="loginForm" novalidate onsubmit="event.preventDefault(); window.location.href='index.html';">
-                    <div class="form-group">
-                        <label for="loginEmail">Email Address</label>
-                        <input type="email" id="loginEmail" class="form-control" placeholder="Enter your email" required>
+
+                <div id="loginError" class="hidden text-red-500 text-sm font-medium mb-4 text-center"></div>
+                <form id="loginForm" novalidate class="space-y-5">
+                    <div class="form-group relative">
+                        <label for="loginEmail" class="block text-sm font-medium text-slate-700 mb-1">Email
+                            Address</label>
+                        <div class="relative">
+                            <div
+                                class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" /></svg>
+                            </div>
+                            <input type="email" id="loginEmail" class="input-field !pl-12 bg-white/70"
+                                placeholder="Enter your email" required>
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="loginPassword">Password</label>
-                        <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password" required>
+                    <div class="form-group relative">
+                        <label for="loginPassword"
+                            class="block text-sm font-medium text-slate-700 mb-1">Password</label>
+                        <div class="relative">
+                            <div
+                                class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>
+                            </div>
+                            <input type="password" id="loginPassword" class="input-field !pl-12 bg-white/70"
+                                placeholder="Enter your password" required>
+                        </div>
                     </div>
 
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; font-size: 0.95rem;">
-                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; margin: 0; color: var(--text-light); font-weight: normal;">
-                            <input type="checkbox"> Remember me
+                    <div class="flex items-center justify-between mt-2 mb-6 text-sm">
+                        <label
+                            class="flex items-center gap-2 cursor-pointer text-slate-600 hover:text-slate-800 transition-colors">
+                            <input type="checkbox"
+                                class="rounded text-primary focus:ring-primary h-4 w-4 border-slate-300">
+                            <span>Remember me</span>
                         </label>
-                        <a href="#" class="text-primary" style="font-weight: 500;">Forgot Password?</a>
+                        <a href="#" class="text-primary font-medium hover:text-primary-dark transition-colors">Forgot
+                            Password?</a>
                     </div>
 
-                    <button type="submit" class="btn" style="width: 100%;">Sign In</button>
-                    
-                    <div class="text-center" style="margin-top: 1.5rem; font-size: 0.95rem;">
-                        <span style="color: var(--text-light);">Don't have an account?</span> <a href="#" class="text-primary" style="font-weight: 600;">Sign up</a>
+                    <button type="submit"
+                        class="btn-primary w-full py-3.5 shadow-md flex justify-center items-center gap-2 text-lg">
+                        <span>Sign In</span> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
+                    </button>
+
+                    <div class="text-center mt-8 text-sm">
+                        <span class="text-slate-500">Don't have an account?</span>
+                        <a href="register.html"
+                            class="text-primary font-semibold hover:text-primary-dark transition-colors ml-1">Sign
+                            up</a>
                     </div>
                 </form>
-            </article>
+            </div>
         </section>
     </main>
 
-    <footer>
-        <div class="footer-grid">
-            <div class="footer-col">
-                <h3>Turf Arena</h3>
-                <p>Your premium destination for booking high-quality sports turfs instantly. Play anytime, anywhere.</p>
-            </div>
-            <div class="footer-col">
-                <h3>Quick Links</h3>
-                <ul class="footer-links">
-                    <li><a href="index.html#home">Home</a></li>
-                    <li><a href="index.html#about-us">About Us</a></li>
-                    <li><a href="index.html#slots">Available Slots</a></li>
-                    <li><a href="index.html#booking">Book Now</a></li>
-                    <li><a href="login.html">Login</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h3>Contact Info</h3>
-                <ul class="footer-links">
-                    <li><i class="fas fa-phone-alt"></i> +91 9876543210</li>
-                    <li><i class="fas fa-envelope"></i> info@turfarena.com</li>
-                    <li><i class="fas fa-map-marker-alt"></i> Bangalore, Karnataka</li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 Turf Arena. All Rights Reserved.</p>
-        </div>
-    </footer>
-
     <script src="js/script.js"></script>
 </body>
+
 </html>

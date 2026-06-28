@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Turf Arena</title>
+    <meta name="description" content="Create an account at Turf Arena.">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#10b981', // emerald-500
+                        'primary-dark': '#047857', // emerald-700
+                        accent: '#34d399', // emerald-400
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
+                        'glow': '0 0 20px rgba(16, 185, 129, 0.4)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .glass-nav {
+                @apply bg-white/80 backdrop-blur-md border-b border-white/20 shadow-sm;
+            }
+            .btn-primary {
+                @apply bg-gradient-to-r from-primary to-primary-dark text-white px-8 py-3 rounded-full font-heading font-semibold hover:shadow-glow hover:-translate-y-1 transition-all duration-300;
+            }
+            .input-field {
+                @apply w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all duration-300;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-sans text-slate-700 bg-slate-50 antialiased flex flex-col min-h-screen">
+
+    <!-- Navigation -->
+    <header class="fixed w-full top-0 z-50 glass-nav" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <nav class="flex items-center justify-between h-20">
+                <div class="flex-shrink-0">
+                    <a href="index.html" class="flex items-center gap-2 group">
+                        <span class="font-heading font-bold text-2xl text-slate-800 tracking-tight">Turf <span class="text-primary">Arena</span></span>
+                    </a>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html#home" class="font-medium text-slate-600 hover:text-primary transition-colors">Home</a>
+                    <a href="index.html#about-us" class="font-medium text-slate-600 hover:text-primary transition-colors">About</a>
+                    <a href="index.html#slots" class="font-medium text-slate-600 hover:text-primary transition-colors">Slots</a>
+                    <a href="index.html#booking" class="font-medium text-slate-600 hover:text-primary transition-colors">Book Now</a>
+                    <a href="index.html#contact" class="font-medium text-slate-600 hover:text-primary transition-colors">Contact</a>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="login.html" class="font-heading font-semibold text-primary transition-colors">Login</a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button class="mobile-menu-btn text-slate-600 hover:text-primary focus:outline-none p-2" aria-label="Toggle navigation">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-2xl w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
+                    </button>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="md:hidden absolute top-20 left-0 w-full bg-white/95 backdrop-blur-lg border-b border-slate-100 shadow-xl opacity-0 invisible transition-all duration-300 transform -translate-y-4 nav-links">
+            <div class="px-6 py-6 space-y-4 flex flex-col items-center">
+                <a href="index.html#home" class="block text-lg font-medium text-slate-800 hover:text-primary">Home</a>
+                <a href="index.html#features" class="block text-lg font-medium text-slate-800 hover:text-primary">Features</a>
+                <a href="index.html#slots" class="block text-lg font-medium text-slate-800 hover:text-primary">Available Slots</a>
+                <a href="index.html#about-us" class="block text-lg font-medium text-slate-800 hover:text-primary">About Us</a>
+                <a href="index.html#contact" class="block text-lg font-medium text-slate-800 hover:text-primary">Contact</a>
+                <hr class="w-full border-slate-200">
+                <a href="login.html" class="block text-lg font-heading font-semibold text-primary">Login to Account</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow pt-24 pb-12 flex flex-col items-center justify-center relative overflow-hidden">
+        <!-- Background Elements -->
+        <div class="fixed inset-0 z-0">
+            <img src="images/hero_turf.png" alt="Turf Background" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-slate-900/85 backdrop-blur-sm"></div>
+        </div>
+
+        <div class="w-full max-w-5xl px-6 relative z-10 flex flex-col md:flex-row gap-8 items-start justify-center">
+            
+            <!-- Registration Form Section -->
+            <section class="w-full max-w-md">
+                <div class="bg-white/90 backdrop-blur-xl border border-white/20 p-8 rounded-3xl shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]">
+                    <div class="text-center mb-6">
+                        <h2 class="font-heading text-3xl font-bold text-slate-800 mb-2">Create Account</h2>
+                        <p class="text-slate-500">Join Turf Arena today</p>
+                    </div>
+
+                    <div id="registerError" class="hidden text-red-500 text-sm font-medium mb-4 text-center"></div>
+                    
+                    <form id="registerForm" novalidate class="space-y-4">
+                        <!-- Textbox -->
+                        <div class="form-group relative">
+                            <label for="regName" class="block text-sm font-medium text-slate-700 mb-1">Full Name</label>
+                            <input type="text" id="regName" class="input-field bg-white/70" placeholder="John Doe" required>
+                        </div>
+
+                        <!-- Email (Mail) -->
+                        <div class="form-group relative">
+                            <label for="regEmail" class="block text-sm font-medium text-slate-700 mb-1">Email Address</label>
+                            <input type="email" id="regEmail" class="input-field bg-white/70" placeholder="john@example.com" required>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="form-group relative">
+                            <label for="regPassword" class="block text-sm font-medium text-slate-700 mb-1">Password</label>
+                            <input type="password" id="regPassword" class="input-field bg-white/70" placeholder="••••••••" required>
+                        </div>
+
+                        <!-- Calendar (Date) -->
+                        <div class="form-group relative">
+                            <label for="regDob" class="block text-sm font-medium text-slate-700 mb-1">Date of Birth</label>
+                            <input type="date" id="regDob" class="input-field bg-white/70" required>
+                        </div>
+
+                        <!-- Drop Down -->
+                        <div class="form-group relative">
+                            <label for="regSport" class="block text-sm font-medium text-slate-700 mb-1">Favorite Sport</label>
+                            <select id="regSport" class="input-field bg-white/70" required>
+                                <option value="">Select a sport</option>
+                                <option value="Football">Football</option>
+                                <option value="Cricket">Cricket</option>
+                                <option value="Tennis">Tennis</option>
+                                <option value="Basketball">Basketball</option>
+                            </select>
+                        </div>
+
+                        <!-- File Upload -->
+                        <div class="form-group relative">
+                            <label for="regAvatar" class="block text-sm font-medium text-slate-700 mb-1">Profile Avatar (Optional)</label>
+                            <input type="file" id="regAvatar" accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-primary hover:file:bg-emerald-100 transition-colors">
+                        </div>
+
+                        <button type="submit" class="btn-primary w-full py-3.5 mt-2 shadow-md flex justify-center items-center gap-2 text-lg">
+                            <span>Register</span>
+                        </button>
+
+                        <div class="text-center mt-4 text-sm">
+                            <span class="text-slate-500">Already have an account?</span>
+                            <a href="login.html" class="text-primary font-semibold hover:text-primary-dark transition-colors ml-1">Sign in</a>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Display Card Section -->
+            <section class="w-full max-w-md hidden" id="displaySection">
+                <div class="bg-white/95 backdrop-blur-xl border border-emerald-200 p-8 rounded-3xl shadow-[0_0_40px_rgba(16,185,129,0.2)] transform transition-all animate-fade-in-up">
+                    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100">
+                        <div class="w-12 h-12 rounded-full bg-emerald-100 text-primary flex items-center justify-center text-xl">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-heading text-xl font-bold text-slate-800">Registration Complete</h3>
+                            <p class="text-xs text-slate-500">Your details have been saved locally.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4" id="userDataCard">
+                        <!-- Content injected via JS -->
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

@@ -7,14 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
         mobileBtn.addEventListener('click', () => {
             navLinks.classList.toggle('active');
             // Toggle icon between bars and times
-            const icon = mobileBtn.querySelector('i');
+            const icon = mobileBtn.querySelector('svg');
             if (icon) {
                 if (navLinks.classList.contains('active')) {
-                    icon.classList.remove('fa-bars');
-                    icon.classList.add('fa-times');
+                    mobileBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>`;
                 } else {
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
+                    mobileBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>`;
                 }
             }
         });
@@ -23,10 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
         navLinks.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
                 navLinks.classList.remove('active');
-                const icon = mobileBtn.querySelector('i');
+                const icon = mobileBtn.querySelector('svg');
                 if (icon) {
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
+                    mobileBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>`;
                 }
             });
         });
@@ -215,30 +212,37 @@ function saveBookingData() {
 // Success Popup Handling
 function showSuccessPopup(title, text) {
     // Create popup elements if they don't exist
-    let overlay = document.querySelector('.popup-overlay');
+    let overlay = document.getElementById('successPopupOverlay');
 
     if (!overlay) {
         overlay = document.createElement('div');
-        overlay.className = 'popup-overlay';
+        overlay.id = 'successPopupOverlay';
+        overlay.className = 'fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center opacity-0 invisible transition-all duration-300 popup-overlay';
 
         const content = document.createElement('div');
-        content.className = 'popup-content';
+        content.className = 'bg-white rounded-3xl p-8 max-w-sm w-[90%] transform scale-90 transition-all duration-300 popup-content shadow-2xl relative overflow-hidden flex flex-col items-center text-center';
+
+        const gradientBar = document.createElement('div');
+        gradientBar.className = 'absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary to-accent';
 
         const icon = document.createElement('div');
-        icon.className = 'popup-icon';
-        icon.innerHTML = '<i class="fas fa-check"></i>';
+        icon.className = 'w-20 h-20 bg-emerald-50 text-primary rounded-full flex items-center justify-center text-4xl mx-auto mb-6 shadow-inner';
+        icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>`;
 
         const heading = document.createElement('h3');
         heading.id = 'popupTitle';
+        heading.className = 'font-heading text-2xl font-bold text-slate-800 mb-3';
 
         const message = document.createElement('p');
         message.id = 'popupText';
+        message.className = 'text-slate-500 mb-8 leading-relaxed';
 
         const btn = document.createElement('button');
-        btn.className = 'btn';
-        btn.textContent = 'Awesome!';
+        btn.className = 'w-full bg-primary hover:bg-primary-dark text-white font-medium py-3.5 rounded-xl transition-all shadow-md active:scale-95 flex items-center justify-center gap-2';
+        btn.innerHTML = `<span>Awesome!</span> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>`;
         btn.onclick = () => overlay.classList.remove('active');
 
+        content.appendChild(gradientBar);
         content.appendChild(icon);
         content.appendChild(heading);
         content.appendChild(message);
@@ -260,17 +264,36 @@ function showSuccessPopup(title, text) {
 const locationBtn = document.getElementById('locationBtn');
 const locationStatus = document.getElementById('locationStatus');
 
+// Turf locations (Bangalore coordinates as an example)
+const TURF_LOCATIONS = [
+    { name: "Arena Prime (HSR Layout)", lat: 12.9121, lon: 77.6446 },
+    { name: "Greenfield Turf (Koramangala)", lat: 12.9352, lon: 77.6245 },
+    { name: "Kickoff Pitch (Indiranagar)", lat: 12.9784, lon: 77.6408 }
+];
+
+// Helper to calculate distance in km using Haversine formula
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Earth's radius in km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+}
+
 if (locationBtn) {
     locationBtn.addEventListener('click', () => {
         
         // 1. Check if the browser actually supports Geolocation
         if (!navigator.geolocation) {
-            locationStatus.textContent = "Geolocation is not supported by your browser.";
+            locationStatus.innerHTML = "<span class='text-red-500'>Geolocation is not supported by your browser.</span>";
             return;
         }
 
         // 2. Tell the user we are searching
-        locationStatus.textContent = "Locating you...";
+        locationStatus.innerHTML = "<span class='text-slate-500 animate-pulse'>Locating you...</span>";
         
         // 3. Request the location
         navigator.geolocation.getCurrentPosition(
@@ -279,33 +302,168 @@ if (locationBtn) {
                 const latitude  = position.coords.latitude;
                 const longitude = position.coords.longitude;
                 
-                // We got the coordinates! You can now use them.
-                locationStatus.innerHTML = `
-                    <span style="color: var(--success);">Location found!</span><br>
-                    Latitude: ${latitude.toFixed(4)} <br>
-                    Longitude: ${longitude.toFixed(4)}
-                `;
+                // Calculate distance for all turfs
+                const turfsWithDistance = TURF_LOCATIONS.map(turf => {
+                    return {
+                        ...turf,
+                        distance: calculateDistance(latitude, longitude, turf.lat, turf.lon)
+                    };
+                }).sort((a, b) => a.distance - b.distance);
+                
+                // Build HTML to display turfs
+                let html = `<div class="text-emerald-600 font-semibold mb-3">Nearest turfs:</div>`;
+                html += `<div class="flex flex-col gap-2 w-full max-w-sm mx-auto">`;
+                turfsWithDistance.forEach(turf => {
+                    html += `
+                        <div class="bg-white p-3 rounded-lg border border-slate-100 shadow-sm flex justify-between items-center text-left hover:border-primary/30 transition-colors">
+                            <span class="font-medium text-slate-800 text-sm">${turf.name}</span>
+                            <span class="text-emerald-600 text-xs font-bold bg-emerald-50 px-2 py-1 rounded ml-3 shrink-0">${turf.distance.toFixed(1)} km</span>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+                
+                locationStatus.innerHTML = html;
             },
             // Error Callback
             (error) => {
-                locationStatus.style.color = "var(--error)";
+                let errorMsg = "An unknown error occurred.";
                 switch(error.code) {
                     case error.PERMISSION_DENIED:
-                        locationStatus.textContent = "You denied the request for Geolocation.";
+                        errorMsg = "You denied the request for Geolocation.";
                         break;
                     case error.POSITION_UNAVAILABLE:
-                        locationStatus.textContent = "Location information is unavailable.";
+                        errorMsg = "Location information is unavailable.";
                         break;
                     case error.TIMEOUT:
-                        locationStatus.textContent = "The request to get user location timed out.";
-                        break;
-                    default:
-                        locationStatus.textContent = "An unknown error occurred.";
+                        errorMsg = "The request to get user location timed out.";
                         break;
                 }
+                locationStatus.innerHTML = `<span class="text-red-500">${errorMsg}</span>`;
             }
         );
     });
 }
 
+// Login Form Validation
+document.addEventListener('DOMContentLoaded', () => {
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const emailInput = document.getElementById('loginEmail');
+            const passwordInput = document.getElementById('loginPassword');
+            const errorContainer = document.getElementById('loginError');
+            
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+            
+            // Simple email regex
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (!email) {
+                showError("Please enter your email address.");
+                return;
+            }
+            
+            if (!emailRegex.test(email)) {
+                showError("Please enter a valid email address.");
+                return;
+            }
+            
+            if (!password) {
+                showError("Please enter your password.");
+                return;
+            }
+            
+            if (password.length < 6) {
+                showError("Password must be at least 6 characters long.");
+                return;
+            }
+            
+            // If valid, clear error and simulate login (redirect)
+            errorContainer.classList.add('hidden');
+            window.location.href = 'index.html';
+            
+            function showError(msg) {
+                errorContainer.textContent = msg;
+                errorContainer.classList.remove('hidden');
+            }
+        });
+    }
 
+    // Registration Form Validation & Display
+    const registerForm = document.getElementById('registerForm');
+    if (registerForm) {
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const nameInput = document.getElementById('regName');
+            const emailInput = document.getElementById('regEmail');
+            const passwordInput = document.getElementById('regPassword');
+            const dobInput = document.getElementById('regDob');
+            const sportInput = document.getElementById('regSport');
+            const avatarInput = document.getElementById('regAvatar');
+            const errorContainer = document.getElementById('registerError');
+            const displaySection = document.getElementById('displaySection');
+            const userDataCard = document.getElementById('userDataCard');
+            
+            const name = nameInput.value.trim();
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+            const dob = dobInput.value;
+            const sport = sportInput.value;
+            const avatarFile = avatarInput.files[0];
+            
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            // Validation
+            if (!name) return showError("Please enter your full name.");
+            if (!email || !emailRegex.test(email)) return showError("Please enter a valid email address.");
+            if (!password || password.length < 6) return showError("Password must be at least 6 characters.");
+            if (!dob) return showError("Please select your date of birth.");
+            if (!sport) return showError("Please select your favorite sport.");
+            
+            errorContainer.classList.add('hidden');
+            
+            // Local Storage (Self Learning)
+            const userData = {
+                name,
+                email,
+                dob,
+                sport,
+                fileName: avatarFile ? avatarFile.name : 'No file chosen',
+                timestamp: new Date().toISOString()
+            };
+            
+            let users = JSON.parse(localStorage.getItem('turfUsers')) || [];
+            users.push(userData);
+            localStorage.setItem('turfUsers', JSON.stringify(users));
+
+            // Arrow function to create display item
+            const createDisplayItem = (label, value) => `
+                <div class="flex justify-between items-center py-2 border-b border-slate-50 last:border-0">
+                    <span class="text-sm text-slate-500">${label}</span>
+                    <span class="text-sm font-medium text-slate-800">${value}</span>
+                </div>
+            `;
+
+            // Display all the data in a card below
+            userDataCard.innerHTML = `
+                ${createDisplayItem('Name', userData.name)}
+                ${createDisplayItem('Email', userData.email)}
+                ${createDisplayItem('Date of Birth', userData.dob)}
+                ${createDisplayItem('Sport', userData.sport)}
+                ${createDisplayItem('Profile Upload', userData.fileName)}
+            `;
+            
+            displaySection.classList.remove('hidden');
+            
+            function showError(msg) {
+                errorContainer.textContent = msg;
+                errorContainer.classList.remove('hidden');
+            }
+        });
+    }
+});
